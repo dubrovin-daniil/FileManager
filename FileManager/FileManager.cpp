@@ -41,23 +41,28 @@ int main()
 				currentFolder->print();
 			}
 			else {
+				system("cls");
+				currentFolder->print();
+
 				cout << "Invalid folder index." << endl;
 			}
 		}
 		else if (choice == 2) {
-			string fileName, fileType;
-			cout << "Enter file name: ";
-			cin >> fileName;
-			cout << "Enter file type (extension): ";
-			cin >> fileType;
-			currentFolder->addFile(File(fileName, fileType));
-			system("cls");
-			currentFolder->print();
+            string fileName, fileType;
+            cout << "Enter file name: ";
+            cin.ignore();
+            getline(cin, fileName);
+            cout << "Enter file type (extension): ";
+            getline(cin, fileType);
+            currentFolder->addFile(File(fileName, fileType));
+            system("cls");
+            currentFolder->print();
 		}
         else if (choice == 3) {
 			string folderName;
 			cout << "Enter subfolder name: ";
-			cin >> folderName;
+			cin.ignore();
+			getline(cin, folderName);
 			Folder NewFolder(folderName);
 			currentFolder->addSubFolder(NewFolder);
 			system("cls");
@@ -85,7 +90,8 @@ int main()
 			cout << "Enter file index to rename: ";
 			cin >> fileIndex;
 			cout << "Enter new file name: ";
-			cin >> newName;
+			cin.ignore();
+			getline(cin, newName);
 			currentFolder->renameFile(fileIndex, newName);
 			system("cls");
 			currentFolder->print();
@@ -93,7 +99,8 @@ int main()
 		else if (choice == 7) {
 			string newName;
 			cout << "Enter new folder name: ";
-			cin >> newName;
+			cin.ignore();
+			getline(cin, newName);
 			currentFolder->setName(newName);
 			system("cls");
 			currentFolder->print();
@@ -119,13 +126,22 @@ int main()
 				currentFolder->print();
 			}
 			else {
+				system("cls");
+				currentFolder->print();
+
 				cout << "Invalid folder index." << endl;
 			}
 		}
 		else if (choice == 10) {
 			string searchName;
 			cout << "Enter file or folder name to search: ";
-			cin >> searchName;
+			cin.ignore();
+			getline(cin, searchName);
+
+			system("cls");
+			currentFolder->print();
+
+			cout << "\n\nSearch results for \"" << searchName << "\":" << endl;
 			currentFolder->searchFileFolder(searchName);
 		}
 		else if (choice == 11) {
@@ -136,7 +152,11 @@ int main()
 			continue;
 		}
 		else {
+			system("cls");
+			currentFolder->print();
+
 			cout << "Invalid choice. Please try again." << endl;
+
 			continue;
 		}
 	}

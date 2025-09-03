@@ -20,6 +20,7 @@ void Folder::print() const {
 		}
 	}
 	cout << "-------------------------------------------------- " << endl;
+	cout << "Errors: " << endl;
 }
 
 // Method to add a file to the folder
@@ -157,7 +158,7 @@ void Folder::searchFileFolder(const string& fileName) const {
     if (subFolders) {
         for (int i = 0; i < folderSize; i++) {
             if (subFolders[i].getName() == fileName) {
-                cout << "\n" << subFolders[i].getName() << "found in Folder: " << name << endl;
+                cout << "\n" << subFolders[i].getName() << " found in Folder: " << name << endl;
                 found = true;
             }
         }
