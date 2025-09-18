@@ -1,21 +1,23 @@
 ﻿#include <iostream>
 #include <stdlib.h>
+#include <fstream>
 #include "Folder.h"
 #include "File.h"
 
 using namespace std;
 
-int main()
-{
-	Folder ThisComputer("This Computer");
-	Folder* currentFolder = &ThisComputer;
+int main()  
+{ 
+	ifstream is("example.txt");
+	Folder ThisComputer("This Computer");  
+	Folder* currentFolder = &ThisComputer; 
 
 	Folder diskC("Disk C");
 	Folder diskD("Disk D");
 
 	ThisComputer.addSubFolder(diskC);
-	ThisComputer.addSubFolder(diskD);
-
+	ThisComputer.addSubFolder(diskD);    
+	  
 	ThisComputer.print();
 
 	while (true) {
@@ -32,7 +34,7 @@ int main()
 			int subChoice;
 			cout << "Select a folder to open: ";
 			cin >> subChoice;
-			cout << endl;
+			cout << endl; 
 			system("cls");
 
 			Folder* selected = currentFolder->getSubFolder(subChoice);
