@@ -1,40 +1,82 @@
 #include <iostream>
-#include <string>
+#include <Windows.h>
 #include "File.h"
 #include "Folder.h"
 
 using namespace std;
 
+
+void Folder::thisComputer() {
+	DWORD drives = GetLogicalDrives();
+	vector<char> drivesVector;
+	cout << "This Computer: " << endl;
+	cout << "-------------------------------------------------- " << endl;
+	for (char i = 'A'; i <= 'Z'; i++) {
+		if (drives & (1 << (i - 'A'))) {
+			string drive = string(1, i) + ":\\";
+			cout << drive << endl;
+			drivesVector.push_back(i);
+		}
+	}
+	cout << "-------------------------------------------------- " << endl;
+
+	bool value = true;
+	char choice;
+	cout << "Change drive: ";
+	cin >> choice;
+	
+	
+	for (char i : drivesVector) {
+		if (i == choice) {
+			value = false;
+			break;
+		}
+	}
+	
+	string strchoice(1, choice);
+
+	if (value == true) {
+		throw runtime_error("Invalid drive selected. Defaulting to C:");
+	}
+	else {
+		setPath(strchoice + ":\\");
+	}
+}
+
 // Method to print folder contents
 void Folder::print() const {
-	cout << "Folder: " << name << endl;
+	cout << fs::absolute(path).string() << endl;
 	cout << "-------------------------------------------------- " << endl;
-	if (files) {
-		for (int i = 0; i < fileSize; i++) {
-			cout << "- " << files[i].getName() << "." << files[i].getExtension() << endl;
+	//if (files) {
+	//	for (int i = 0; i < fileSize; i++) {
+	//		cout << "- " << files[i].getName() << "." << files[i].getExtension() << endl;
+	//	}
+	//}
+	//if (subFolders) {
+	//	for (int i = 0; i < folderSize; i++) {
+	//		cout << "[Folder] " << subFolders[i].getName() << endl;
+	//	}
+	//}
+	for (auto entry : fs::directory_iterator(path)) {
+		if (entry.is_directory()) {
+			cout << "[Folder] " << entry.path().filename().string() << endl;
 		}
-	}
-	if (subFolders) {
-		for (int i = 0; i < folderSize; i++) {
-			cout << "[Folder] " << subFolders[i].getName() << endl;
+		else {
+			cout << "- " << entry.path().filename().string() << endl;
 		}
+		index + 1;
 	}
+
 	cout << "-------------------------------------------------- " << endl;
 	cout << "Errors: " << endl;
 }
 
+void Folder::changeDirectory(const string& newPath) {
+	setPath(newPath);
+}
+
 // Method to add a file to the folder
 void Folder::addFile(const File& file) {
-	if (!files) {
-		files = new File[100];
-	}
-	if (fileSize < 100) {
-		files[fileSize] = file;
-		fileSize++;
-	}
-	else {
-		cout << "File array is full!" << endl;
-	}
 
 }
 

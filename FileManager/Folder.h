@@ -1,9 +1,12 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
+#include <filesystem>
 #include "File.h"
 
 using namespace std;
+namespace fs = filesystem;
 
 class Folder
 {
@@ -12,12 +15,15 @@ private:
 	string name;
 	File* files;
 	Folder* subFolders;
+	string path = "H\\";
+	vector<string> dirs;
+	int index = 0;
 	int fileSize;
 	int folderSize;
 public:
 	// Constructors
 	Folder() : Folder("New Folder") {}
-	Folder(string n) : name(n), fileSize(0), folderSize(0) {}
+	Folder(string n) : name(n), fileSize(0), folderSize(0){}
 	
 	// Copy Constructor
 	Folder(const Folder& other) : name(other.name), fileSize(other.fileSize), folderSize(other.folderSize) {
@@ -56,10 +62,18 @@ public:
 	void setName(string folderName) {
 		name = folderName;
 	}
+	void setPath(const string& p) {
+		path = p;
+	}
+	string getPath() const {
+		return path;
+	}
 
 
 	// Methods
+	void thisComputer();
 	void print() const;
+	void changeDirectory(const string& dir);
 	void addFile(const File& file);
 	void addSubFolder(const Folder& folder);
 	void removeFile(int index);
