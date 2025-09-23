@@ -75,7 +75,7 @@ public:
 	void print() const;
 	void changeDirectory(const string& dir);
 	void addFile(const File& file);
-	void addSubFolder(const Folder& folder);
+	void addSubFolder();
 	void removeFile(int index);
 	void removeSubFolder(int index);
 	void renameFile(int index, const string& newName);

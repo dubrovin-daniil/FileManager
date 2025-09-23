@@ -38,11 +38,11 @@ int main()
 	while (true) {
 		string choice;
 		cout << "\n\nTerminal> \n";
-		cout << "Select an action:\nexit - Closing the program.\ncd - Change Directory.\nmkfile - Make file.\nmkdir - Make directory.\ndel - Delete file/directory.\nren - Rename file/directory.\ncopy - Copy file/directory.\nmove - Transfer file/directory.\nsearch - Search file/directory.\n. - current directory\n.. - Back." << endl;
+		cout << "Select an action:\nexit - Closing the program.\ncd - Change Directory.\nmkdir - Make directory.\ntouch - Make file.\ndel - Delete file/directory.\nren - Rename file/directory.\ncopy - Copy file/directory.\nmove - Transfer file/directory.\nsearch - Search file/directory.\n.. - Back." << endl;
 		cout << ">>> ";
 		cin >> choice;
 
-		if (choice == "Exit") {
+		if (choice == "exit") {
 			break;
 		}
 		else if (choice == "cd") {
@@ -51,12 +51,25 @@ int main()
 			cin.ignore();
 			getline(cin, subChoice);
 
-			ThisComputer.changeDirectory(ThisComputer.getPath() + subChoice + "\\");
+			try {
+				ThisComputer.changeDirectory(ThisComputer.getPath() + subChoice + "\\");
+				cout << endl;
+				system("cls");
+				ThisComputer.print();
+			}
+			catch (const runtime_error& e) {
+				cout << "The system cannot find the specified path: " << fs::absolute(ThisComputer.getPath()).string() << endl;
+				cout << "Press Enter to continue..." << endl;
+				cin.get();
 
-			cout << endl; 
-			system("cls");
+				ThisComputer.setPath(fs::path(ThisComputer.getPath()).parent_path().string());
+				ThisComputer.setPath(fs::path(ThisComputer.getPath()).parent_path().string());
+				system("cls");
+				ThisComputer.print();
+			}
 
-			ThisComputer.print();
+
+
 			/*Folder* selected = currentFolder->getSubFolder(subChoice);
 			if (selected != nullptr) {
 				currentFolder = selected;
@@ -75,6 +88,15 @@ int main()
 			cout << endl;
 			system("cls");
 
+			ThisComputer.print();
+		}
+		else if (choice == "mkdir") {
+			ThisComputer.addSubFolder();
+
+			cout << "Press Enter to continue..." << endl;
+			cin.get();
+
+			system("cls");
 			ThisComputer.print();
 		}
 		//else if (choice == 2) {
