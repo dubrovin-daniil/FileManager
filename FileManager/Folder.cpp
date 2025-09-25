@@ -68,7 +68,6 @@ void Folder::print() const {
 	}
 
 	cout << "-------------------------------------------------- " << endl;
-	cout << "Errors: " << endl;
 }
 
 void Folder::changeDirectory(const string& newPath) {
@@ -76,18 +75,29 @@ void Folder::changeDirectory(const string& newPath) {
 }
 
 // Method to add a file to the folder
-void Folder::addFile(const File& file) {
+void Folder::addFile() {
+	string fileNameExt;
+	cin.ignore();
+	getline(cin, fileNameExt);
 
+	string newFile = path + fileNameExt;
+	if (!fs::exists(newFile)) {
+		ofstream file(newFile);
+		file.close();
+		cout << "Directory created: " << newFile << endl;
+	}
+	else {
+		cerr << "Such a file already exists!" << endl;
+	}
 }
 
 // Method to add a subfolder to the folder
 void Folder::addSubFolder() {
-	string subChoice;
-	cout << "Enter the directory name: ";
+	string folderName;
 	cin.ignore();
-	getline(cin, subChoice);
+	getline(cin, folderName);
 
-	string newFolder = path + subChoice;
+	string newFolder = path + folderName;
 	if (!fs::exists(newFolder)) {
 		fs::create_directory(newFolder);
 		cout << "Directory created: " << newFolder << endl;
@@ -95,55 +105,64 @@ void Folder::addSubFolder() {
 	else {
 		cerr << "Such a directory already exists!" << endl;
 	}
-	
-	//if (!subFolders) {
-	//	subFolders = new Folder[100];
-	//}
-	//if (folderSize < 100) {
-	//	subFolders[folderSize] = folder;
-	//	folderSize++;
-	//}
-	//else {
-	//	cout << "Folder array is full!" << endl;
-	//}
 }
 
 // Method to remove a file from the folder
-//void Folder::removeFile(int index) {
-//	if (index - 1 < 0 || index - 1 >= fileSize) {
-//		cout << "Index out of bounds!" << endl;
-//	}
-//	else {
-//		for (int i = index - 1; i < fileSize - 1; i++) {
-//			files[i] = files[i + 1];
-//		}
-//		fileSize--;
-//	}
-//}
-//
-//// Method to remove a subfolder from the folder
-//void Folder::removeSubFolder(int index) {
-//    if (index - 1 < 0 || index - 1 >= folderSize) {
-//        cout << "Index out of bounds!" << endl;
-//    }
-//	else {
-//		for (int i = index - 1; i < folderSize - 1; i++) {
-//			subFolders[i] = subFolders[i + 1];
-//		}
-//		folderSize--;
-//	}
-//}
-//
-//// Method to rename a file
-//void Folder::renameFile(int index, const string& newName) {
-//	if (index - 1 < 0 || index - 1 >= fileSize) {
-//		cout << "Index out of bounds!" << endl;
-//	}
-//	else {
-//		files[index - 1].setName(newName);
-//	}
-//}
-//
+void Folder::removeFile_Folder() {
+	string file_folderName;
+	cin.ignore();
+	getline(cin, file_folderName);
+
+	string del = path + file_folderName;
+	if (fs::exists(del)) {
+		if (fs::is_directory(del)) {
+			fs::remove_all(del);
+			cout << "Directory deleted: " << del << endl;
+		}
+		else {
+			fs::remove(del);
+			cout << "File deleted: " << del << endl;
+		}
+	}
+	else {
+		if (fs::is_directory(del)) {
+			cerr << "This directory does not exist!" << endl;
+		}
+		else {
+			cerr << "This file does not exist!" << endl;
+		}
+	}
+}
+
+// Method to rename a file
+void Folder::renameFile_Folder() {
+	string oldName, newName;
+
+	cout << "Enter the old name: ";
+	cin.ignore();
+	getline(cin, oldName);
+
+	cout << "Enter a new name: ";
+	cin.ignore();
+	getline(cin, newName);
+
+	string oldPath = path + oldName;
+	string newPath = path + newName;
+
+	if (fs::exists(oldPath)) {
+		fs::rename(oldPath, newPath);
+		cout << "Rename: " << oldName << " -> " << newName << endl;
+	}
+	else {
+		if (fs::is_directory(oldPath)) {
+			cerr << "This directory does not exist!" << endl;
+		}
+		else {
+			cerr << "This file does not exist!" << endl;
+		}
+	}
+}
+
 //// Method to copy a file or folder
 //void Folder::copyFileFolder(int index) {
 //	if (index - 1 < 0 || index - 1 >= fileSize + folderSize) {

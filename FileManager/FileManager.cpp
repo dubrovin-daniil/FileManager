@@ -38,7 +38,7 @@ int main()
 	while (true) {
 		string choice;
 		cout << "\n\nTerminal> \n";
-		cout << "Select an action:\nexit - Closing the program.\ncd - Change Directory.\nmkdir - Make directory.\ntouch - Make file.\ndel - Delete file/directory.\nren - Rename file/directory.\ncopy - Copy file/directory.\nmove - Transfer file/directory.\nsearch - Search file/directory.\n.. - Back." << endl;
+		cout << "Select an action:\nexit - Closing the program.\ncd <directory_name> - Change Directory.\nmkdir <name> - Make directory.\ntouch <name.*> - Make file.\ndel <name>/<name.*> - Delete directory/file.\nren - Rename file/directory.\ncopy - Copy file/directory.\nmove - Transfer file/directory.\nsearch - Search file/directory.\n.. - Back." << endl;
 		cout << ">>> ";
 		cin >> choice;
 
@@ -47,7 +47,6 @@ int main()
 		}
 		else if (choice == "cd") {
 			string subChoice;
-			cout << "Select a directory to open: ";
 			cin.ignore();
 			getline(cin, subChoice);
 
@@ -67,20 +66,6 @@ int main()
 				system("cls");
 				ThisComputer.print();
 			}
-
-
-
-			/*Folder* selected = currentFolder->getSubFolder(subChoice);
-			if (selected != nullptr) {
-				currentFolder = selected;
-				currentFolder->print();
-			}
-			else {
-				system("cls");
-				currentFolder->print();
-
-				cout << "Invalid folder index." << endl;
-			}*/
 		}
 		else if (choice == "..") {
 			ThisComputer.setPath(fs::path(ThisComputer.getPath()).parent_path().string());
@@ -99,6 +84,43 @@ int main()
 			system("cls");
 			ThisComputer.print();
 		}
+		else if (choice == "touch") {
+			ThisComputer.addFile();
+
+			cout << "Press Enter to continue..." << endl;
+			cin.get();
+
+			system("cls");
+			ThisComputer.print();
+		}
+		else if (choice == "del") {
+			ThisComputer.removeFile_Folder();
+
+			cout << "Press Enter to continue..." << endl;
+			cin.get();
+
+			system("cls");
+			ThisComputer.print();
+		}
+		else if (choice == "ren") {
+			ThisComputer.renameFile_Folder();
+
+			cout << "Press Enter to continue..." << endl;
+			cin.get();
+
+			system("cls");
+			ThisComputer.print();
+		}
+		else {
+			cerr << "Unknown command!";
+
+			cout << "Press Enter to continue..." << endl;
+			cin.ignore();
+			cin.get();
+
+			system("cls");
+			ThisComputer.print();
+		}	
 		//else if (choice == 2) {
   //          string fileName, fileType;
   //          cout << "Enter file name: ";

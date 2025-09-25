@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include <filesystem>
 #include "File.h"
 
@@ -74,11 +75,10 @@ public:
 	void thisComputer();
 	void print() const;
 	void changeDirectory(const string& dir);
-	void addFile(const File& file);
+	void addFile();
 	void addSubFolder();
-	void removeFile(int index);
-	void removeSubFolder(int index);
-	void renameFile(int index, const string& newName);
+	void removeFile_Folder();
+	void renameFile_Folder();
 	void copyFileFolder(int index);
 	void transferFileFolder(int index, Folder& folder);
 	void searchFileFolder(const string& fileName) const;
