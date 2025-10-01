@@ -10,17 +10,17 @@
 
 using namespace std;
 
-int main()  
-{ 
+int main()
+{
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 
 
-	Folder ThisComputer("This Computer");  
-	Folder* currentFolder = &ThisComputer; 
-	
+	Folder ThisComputer("This Computer");
+	Folder* currentFolder = &ThisComputer;
+
 	try {
-		ThisComputer.thisComputer();
+		ThisComputer.thisComputer(); // Select a drive
 	}
 	catch (const runtime_error& e) {
 		cout << e.what() << endl;
@@ -29,31 +29,53 @@ int main()
 		cin.ignore();
 		cin.get();
 	}
-	
+
 
 
 	system("cls");
 	ThisComputer.print();
 
-	while (true) {
+	while (true) { // Main loop
 		string choice;
 		cout << "\n\nTerminal> \n";
-		cout << "Select an action:\nexit - Closing the program.\ncd <directory_name> - Change Directory.\nmkdir <name> - Make directory.\ntouch <name.*> - Make file.\ndel <name>/<name.*> - Delete directory/file.\nren - Rename file/directory.\ncopy - Copy file/directory.\nmove - Transfer file/directory.\nsearch - Search file/directory.\n.. - Back." << endl;
+		cout << "Select an action:\nexit - Closing the program.\ncdrive - Change Drive.\ncd <directory_name>/(.. - to return to the parent directory) - Change Directory.\nopen <name.*> - Open file.\nmkdir <name> - Make directory.\ntouch <name.*> - Make file.\ndel <name>/<name.*> - Delete directory/file.\nren <old_name>  - Rename file/directory.\ncopy <name>/<name.*> - Copy file/directory.\nmove <name>/<name.*> - Transfer file/directory.\nsize <name>/<name.*> - Output size in bytes.\nsearch <name>/<*.*> - Search file/directory." << endl;
 		cout << ">>> ";
 		cin >> choice;
 
-		if (choice == "exit") {
+		if (choice == "exit") { // Exit the program
 			break;
 		}
-		else if (choice == "cd") {
+		else if (choice == "cdrive") { // Change drive
+			system("cls");
+			try {
+				ThisComputer.thisComputer();
+			}
+			catch (const runtime_error& e) {
+				cout << e.what() << endl;
+				ThisComputer.setPath("C:\\");
+				cout << "Press Enter to continue..." << endl;
+				cin.ignore();
+				cin.get();
+			}
+
+			system("cls"); // Clear the console
+			ThisComputer.print();
+		}
+		else if (choice == "cd") { // Change directory
 			string subChoice;
 			cin.ignore();
 			getline(cin, subChoice);
 
 			try {
-				ThisComputer.changeDirectory(ThisComputer.getPath() + subChoice + "\\");
+				if (subChoice == "..") {
+					ThisComputer.setPath(fs::path(ThisComputer.getPath()).parent_path().string()); // Go to parent directory
+				}
+				else {
+					ThisComputer.changeDirectory(ThisComputer.getPath() + "\\" + subChoice); // Change directory
+				}
+
 				cout << endl;
-				system("cls");
+				system("cls"); // Clear the console
 				ThisComputer.print();
 			}
 			catch (const runtime_error& e) {
@@ -67,48 +89,85 @@ int main()
 				ThisComputer.print();
 			}
 		}
-		else if (choice == "..") {
-			ThisComputer.setPath(fs::path(ThisComputer.getPath()).parent_path().string());
+		else if (choice == "open") { // Open file
+			ThisComputer.openFile();
 
-			cout << endl;
-			system("cls");
+			cout << "Press Enter to continue..." << endl;
+			cin.get();
 
+			system("cls"); // Clear the console
 			ThisComputer.print();
 		}
-		else if (choice == "mkdir") {
+		else if (choice == "mkdir") { // Make directory
 			ThisComputer.addSubFolder();
 
 			cout << "Press Enter to continue..." << endl;
 			cin.get();
 
-			system("cls");
+			system("cls"); // Clear the console
 			ThisComputer.print();
 		}
-		else if (choice == "touch") {
+		else if (choice == "touch") { // Make file
 			ThisComputer.addFile();
 
 			cout << "Press Enter to continue..." << endl;
 			cin.get();
 
-			system("cls");
+			system("cls"); // Clear the console
 			ThisComputer.print();
 		}
-		else if (choice == "del") {
+		else if (choice == "del") { // Delete file/folder
 			ThisComputer.removeFile_Folder();
 
 			cout << "Press Enter to continue..." << endl;
 			cin.get();
 
-			system("cls");
+			system("cls"); // Clear the console
 			ThisComputer.print();
 		}
-		else if (choice == "ren") {
+		else if (choice == "ren") { // Rename file/folder
 			ThisComputer.renameFile_Folder();
 
 			cout << "Press Enter to continue..." << endl;
 			cin.get();
 
-			system("cls");
+			system("cls"); // Clear the console
+			ThisComputer.print();
+		}
+		else if (choice == "copy") { // Copy file/folder
+			ThisComputer.copyFile_Folder();
+
+			cout << "Press Enter to continue..." << endl;
+			cin.get();
+
+			system("cls"); // Clear the console
+			ThisComputer.print();
+		}
+		else if (choice == "move") { // Move file/folder
+			ThisComputer.moveFileFolder();
+
+			cout << "Press Enter to continue..." << endl;
+			cin.get();
+
+			system("cls"); // Clear the console
+			ThisComputer.print();
+		}
+		else if (choice == "size") { // Get size of file/folder
+			ThisComputer.sizeOfFileFolder();
+
+			cout << "Press Enter to continue..." << endl;
+			cin.get();
+
+			system("cls"); // Clear the console
+			ThisComputer.print();
+		}
+		else if (choice == "search") { //Search by mask
+			ThisComputer.maskSearch();
+
+			cout << "Press Enter to continue..." << endl;
+			cin.get();
+
+			system("cls"); // Clear the console
 			ThisComputer.print();
 		}
 		else {
@@ -118,121 +177,8 @@ int main()
 			cin.ignore();
 			cin.get();
 
-			system("cls");
+			system("cls"); // Clear the console
 			ThisComputer.print();
-		}	
-		//else if (choice == 2) {
-  //          string fileName, fileType;
-  //          cout << "Enter file name: ";
-  //          cin.ignore();
-  //          getline(cin, fileName);
-  //          cout << "Enter file type (extension): ";
-  //          getline(cin, fileType);
-  //          currentFolder->addFile(File(fileName, fileType));
-  //          system("cls");
-  //          currentFolder->print();
-		//}
-  //      else if (choice == 3) {
-		//	string folderName;
-		//	cout << "Enter subfolder name: ";
-		//	cin.ignore();
-		//	getline(cin, folderName);
-		//	Folder NewFolder(folderName);
-		//	currentFolder->addSubFolder(NewFolder);
-		//	system("cls");
-		//	currentFolder->print();
-  //      }
-		//else if (choice == 4) {
-		//	int fileIndex;
-		//	cout << "Enter file index to remove: ";
-		//	cin >> fileIndex;
-		//	currentFolder->removeFile(fileIndex);
-		//	system("cls");
-		//	currentFolder->print();
-		//}
-		//else if (choice == 5) {
-		//	int folderIndex;
-		//	cout << "Enter subfolder index to remove: ";
-		//	cin >> folderIndex;
-		//	currentFolder->removeSubFolder(folderIndex);
-		//	system("cls");
-		//	currentFolder->print();
-		//}
-		//else if (choice == 6) {
-		//	int fileIndex;
-		//	string newName;
-		//	cout << "Enter file index to rename: ";
-		//	cin >> fileIndex;
-		//	cout << "Enter new file name: ";
-		//	cin.ignore();
-		//	getline(cin, newName);
-		//	currentFolder->renameFile(fileIndex, newName);
-		//	system("cls");
-		//	currentFolder->print();
-		//}
-		//else if (choice == 7) {
-		//	string newName;
-		//	cout << "Enter new folder name: ";
-		//	cin.ignore();
-		//	getline(cin, newName);
-		//	currentFolder->setName(newName);
-		//	system("cls");
-		//	currentFolder->print();
-		//}
-		//else if (choice == 8) {
-		//	int index;
-		//	cout << "Enter file/folder index to copy: ";
-		//	cin >> index;
-		//	currentFolder->copyFileFolder(index);
-		//	system("cls");
-		//	currentFolder->print();
-		//}
-		//else if (choice == 9) {
-		//	int index;
-		//	int subChoice;
-		//	cout << "Enter file/folder index to transfer: ";
-		//	cin >> index;
-		//	cout << "\nSelect a folder to transfer to: ";
-		//	cin >> subChoice;
-		//	if (currentFolder->getSubFolder(subChoice) != nullptr) {
-		//		currentFolder->transferFileFolder(index, *(currentFolder->getSubFolder(subChoice)));
-		//		system("cls");
-		//		currentFolder->print();
-		//	}
-		//	else {
-		//		system("cls");
-		//		currentFolder->print();
-
-		//		cout << "Invalid folder index." << endl;
-		//	}
-		//}
-		//else if (choice == 10) {
-		//	string searchName;
-		//	cout << "Enter file or folder name to search: ";
-		//	cin.ignore();
-		//	getline(cin, searchName);
-
-		//	system("cls");
-		//	currentFolder->print();
-
-		//	cout << "\n\nSearch results for \"" << searchName << "\":" << endl;
-		//	currentFolder->searchFileFolder(searchName);
-		//}
-		//else if (choice == 11) {
-		//	system("cls");
-
-		//	currentFolder = &ThisComputer;
-		//	currentFolder->print();
-		//	continue;
-		//}
-		//else {
-		//	system("cls");
-		//	currentFolder->print();
-
-		//	cout << "Invalid choice. Please try again." << endl;
-
-		//	continue;
-		//}
+		}
 	}
 }
-

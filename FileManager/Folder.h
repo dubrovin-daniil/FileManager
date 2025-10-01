@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <filesystem>
+#include <regex>
 #include "File.h"
 
 using namespace std;
@@ -75,12 +76,14 @@ public:
 	void thisComputer();
 	void print() const;
 	void changeDirectory(const string& dir);
+	void openFile();
 	void addFile();
 	void addSubFolder();
 	void removeFile_Folder();
 	void renameFile_Folder();
-	void copyFileFolder(int index);
-	void transferFileFolder(int index, Folder& folder);
-	void searchFileFolder(const string& fileName) const;
+	void copyFile_Folder();
+	void moveFileFolder();
+	void sizeOfFileFolder() const;
+	void maskSearch() const;
 };
 
